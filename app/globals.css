@@ -1,0 +1,100 @@
+
+/* ----------------------------------------------
+   TAILWIND LAYERS
+---------------------------------------------- */
+@import "tailwindcss";
+
+
+/* ----------------------------------------------
+   GOOGLE FONTS (Montserrat)
+---------------------------------------------- */
+
+
+/* ----------------------------------------------
+   TRAJAN PRO 3 FONT (Will activate after ZIP upload)
+---------------------------------------------- */
+/* Replace FONT-FILE-NAME.OTF after extracting zip */
+@font-face {
+  font-family: "Trajan Pro 3";
+  src: url("/fonts/trajan/Trajan Pro 3 Regular/Trajan Pro 3 Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+:root {
+  --background: #F4F1EC; /* amanLinen */
+  --foreground: #3B3A36; /* amanCharcoal */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1A1A1A;
+    --foreground: #F4F1EC;
+  }
+}
+
+
+/* ----------------------------------------------
+   GLOBAL THEME TOKENS FOR TAILWIND
+---------------------------------------------- */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Fonts */
+  --font-serif: "Trajan Pro 3", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+
+/* ----------------------------------------------
+   BASE GLOBAL STYLING
+---------------------------------------------- */
+html, body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* Smooth anti-aliasing */
+body, * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ----------------------------------------------
+   TYPOGRAPHY HIERARCHY (Matches Your Brand Spec)
+---------------------------------------------- */
+h1, .h1 {
+  font-family: var(--font-serif);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+h2, .h2 {
+  font-family: var(--font-serif);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+p, span, li, a, button {
+  font-family: var(--font-sans);
+}
+
+
+/* ----------------------------------------------
+   BUTTON STYLE BASELINE
+---------------------------------------------- */
+button, .btn {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
