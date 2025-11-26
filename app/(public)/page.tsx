@@ -6,16 +6,18 @@ import FAQ from "@/components/FAQ";
 import ParallelScrollSection from "@/components/ParallelScrollSection";
 import PartnerCarousel from "@/components/PartnerCarousel";
 import RestaurantCarousel from "@/components/RestaurantCarousel";
+import TranslatorSection from "@/components/TranslatorSection";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
       <LiveLearnBelongA />
+      <TranslatorSection />
       <FeatureParallax />
-      <ParallelScrollSection/>
-      <PartnerCarousel/>
-      <RestaurantCarousel/>
+      <ParallelScrollSection />
+      <PartnerCarousel />
+      <RestaurantCarousel />
       <FAQ />
     </>
   );
