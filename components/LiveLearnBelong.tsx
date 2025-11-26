@@ -21,7 +21,7 @@ export default function LiveLearnBelong() {
 
               {/* TITLE (OUTSIDE, BELOW) */}
               <h3
-                className="mt-4 text-2xl md:text-3xl tracking-wider font-serif  group-hover:translate-x-1 transition-all duration-500"
+                className="mt-4 text-2xl md:text-3xl tracking-wider font-serif  group-hover:translate-x-1 transition-all duration-500 text-center"
               >
                 {item.title}
               </h3>

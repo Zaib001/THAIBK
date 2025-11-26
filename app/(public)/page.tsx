@@ -5,6 +5,7 @@ import FeatureParallax from "@/components/FeatureParallax";
 import FAQ from "@/components/FAQ";
 import ParallelScrollSection from "@/components/ParallelScrollSection";
 import PartnerCarousel from "@/components/PartnerCarousel";
+import RestaurantCarousel from "@/components/RestaurantCarousel";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <FeatureParallax />
       <ParallelScrollSection/>
       <PartnerCarousel/>
+      <RestaurantCarousel/>
       <FAQ />
     </>
   );

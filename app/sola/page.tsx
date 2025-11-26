@@ -125,21 +125,21 @@ export default function SOLA() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#F4F1EC] to-[#E8E3D9] px-4 py-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 bg-[#3B3A36] rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-[#E8E3D9]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
               </svg>
             </div>
-            <h1 className="text-4xl font-bold  text-black">
+            <h1 className="text-4xl font-bold text-[#3B3A36]">
               SOLA Translator
             </h1>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-[#3B3A36]/80 max-w-2xl mx-auto">
             Professional real-time translation between Thai and English with voice input
           </p>
         </div>
@@ -152,18 +152,18 @@ export default function SOLA() {
         {/* Translation Interface - Side by Side */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
           {/* Input Panel */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#E8E3D9]">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                <h2 className="text-xl font-semibold text-gray-800">Source Text</h2>
+                <div className="w-3 h-3 bg-[#3B3A36] rounded-full"></div>
+                <h2 className="text-xl font-semibold text-[#3B3A36]">Source Text</h2>
               </div>
               
               <div className="flex items-center gap-3">
                 <select 
                   value={sourceLang}
                   onChange={(e) => setSourceLang(e.target.value as "th" | "en")}
-                  className="border-0 bg-blue-50 text-blue-700 rounded-lg px-3 py-1 text-sm font-semibold focus:ring-2 focus:ring-blue-200"
+                  className="border-0 bg-[#E8E3D9] text-[#3B3A36] rounded-lg px-3 py-1 text-sm font-semibold focus:ring-2 focus:ring-[#E8E3D9]"
                 >
                   <option value="en">🇺🇸 English</option>
                   <option value="th">🇹🇭 Thai</option>
@@ -171,7 +171,7 @@ export default function SOLA() {
                 
                 <button
                   onClick={clearTexts}
-                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="p-2 text-[#3B3A36]/60 hover:text-[#3B3A36] transition-colors"
                   title="Clear all"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,13 +183,13 @@ export default function SOLA() {
 
             {/* Quick Phrases */}
             <div className="mb-4">
-              <p className="text-sm text-gray-500 mb-2">Try sample phrases:</p>
+              <p className="text-sm text-[#3B3A36]/60 mb-2">Try sample phrases:</p>
               <div className="flex flex-wrap gap-2">
                 {samplePhrases[sourceLang].slice(0, 3).map((phrase, index) => (
                   <button
                     key={index}
                     onClick={() => handleSamplePhrase(phrase)}
-                    className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition-colors"
+                    className="text-xs bg-[#E8E3D9] text-[#3B3A36] px-3 py-1 rounded-full hover:bg-[#E8E3D9]/80 transition-colors border border-[#E8E3D9]"
                   >
                     {phrase.slice(0, 20)}...
                   </button>
@@ -205,12 +205,12 @@ export default function SOLA() {
                 placeholder={sourceLang === 'en' 
                   ? "Type or speak in English...\n\nExample: Hello, how can I help you today?" 
                   : "พิมพ์หรือพูดภาษาไทย...\n\nตัวอย่าง: สวัสดีครับ มีอะไรให้ช่วยไหมคะ"}
-                className="w-full h-64 border-2 border-gray-200 rounded-xl p-4 text-lg resize-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all placeholder-gray-400"
+                className="w-full h-64 border-2 border-[#E8E3D9] rounded-xl p-4 text-lg resize-none focus:border-[#3B3A36] focus:ring-4 focus:ring-[#E8E3D9] transition-all placeholder-[#3B3A36]/40 bg-white"
                 rows={8}
               />
               
               {/* Character Count */}
-              <div className="absolute bottom-3 left-4 text-sm text-gray-400">
+              <div className="absolute bottom-3 left-4 text-sm text-[#3B3A36]/40">
                 {inputText.length} characters
               </div>
               
@@ -228,11 +228,11 @@ export default function SOLA() {
             <button
               onClick={handleTranslate}
               disabled={!inputText.trim() || isTranslating}
-              className="w-full bg-black disabled:from-gray-400 disabled:to-gray-500 text-white px-6 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-[1.02] disabled:scale-100 flex items-center justify-center gap-3 shadow-lg"
+              className="w-full bg-[#3B3A36] disabled:bg-[#3B3A36]/40 text-[#E8E3D9] px-6 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-[1.02] disabled:scale-100 flex items-center justify-center gap-3 shadow-lg hover:bg-[#3B3A36]/90 disabled:hover:bg-[#3B3A36]/40"
             >
               {isTranslating ? (
                 <>
-                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#E8E3D9] border-t-transparent"></div>
                   Translating...
                 </>
               ) : (
@@ -247,18 +247,18 @@ export default function SOLA() {
           </div>
 
           {/* Output Panel */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+          <div className="bg-white rounded-2xl shadow-lg p-6 border border-[#E8E3D9]">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
-                <h2 className="text-xl font-semibold text-gray-800">Translation</h2>
+                <div className="w-3 h-3 bg-[#3B3A36] rounded-full"></div>
+                <h2 className="text-xl font-semibold text-[#3B3A36]">Translation</h2>
               </div>
               
               <div className="flex items-center gap-2">
                 <select 
                   value={targetLang}
                   onChange={(e) => setTargetLang(e.target.value as "th" | "en")}
-                  className="border-0 bg-purple-50 text-purple-700 rounded-lg px-3 py-1 text-sm font-semibold focus:ring-2 focus:ring-purple-200"
+                  className="border-0 bg-[#E8E3D9] text-[#3B3A36] rounded-lg px-3 py-1 text-sm font-semibold focus:ring-2 focus:ring-[#E8E3D9]"
                 >
                   <option value="th">🇹🇭 Thai</option>
                   <option value="en">🇺🇸 English</option>
@@ -266,10 +266,10 @@ export default function SOLA() {
                 
                 <button
                   onClick={swapLanguages}
-                  className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                  className="p-2 bg-[#E8E3D9] hover:bg-[#E8E3D9]/80 rounded-lg transition-colors"
                   title="Swap languages"
                 >
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-[#3B3A36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                   </svg>
                 </button>
@@ -281,51 +281,49 @@ export default function SOLA() {
               language={targetLang}
               isLoading={isTranslating}
             />
-
-            
           </div>
         </div>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-4 gap-6 mb-12">
-          <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-[#E8E3D9]">
+            <div className="w-12 h-12 bg-[#E8E3D9] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-[#3B3A36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-800 mb-2">Voice Input</h3>
-            <p className="text-gray-600 text-sm">Speak naturally in both languages</p>
+            <h3 className="font-semibold text-[#3B3A36] mb-2">Voice Input</h3>
+            <p className="text-[#3B3A36]/70 text-sm">Speak naturally in both languages</p>
           </div>
 
-          <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-[#E8E3D9]">
+            <div className="w-12 h-12 bg-[#E8E3D9] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-[#3B3A36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-800 mb-2">Instant Results</h3>
-            <p className="text-gray-600 text-sm">Real-time translation</p>
+            <h3 className="font-semibold text-[#3B3A36] mb-2">Instant Results</h3>
+            <p className="text-[#3B3A36]/70 text-sm">Real-time translation</p>
           </div>
 
-          <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-[#E8E3D9]">
+            <div className="w-12 h-12 bg-[#E8E3D9] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-[#3B3A36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-800 mb-2">Secure</h3>
-            <p className="text-gray-600 text-sm">Your data is protected</p>
+            <h3 className="font-semibold text-[#3B3A36] mb-2">Secure</h3>
+            <p className="text-[#3B3A36]/70 text-sm">Your data is protected</p>
           </div>
 
-          <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-[#E8E3D9]">
+            <div className="w-12 h-12 bg-[#E8E3D9] rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg className="w-6 h-6 text-[#3B3A36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
             </div>
-            <h3 className="font-semibold text-gray-800 mb-2">Smart AI</h3>
-            <p className="text-gray-600 text-sm">Context-aware translations</p>
+            <h3 className="font-semibold text-[#3B3A36] mb-2">Smart AI</h3>
+            <p className="text-[#3B3A36]/70 text-sm">Context-aware translations</p>
           </div>
         </div>
       </div>

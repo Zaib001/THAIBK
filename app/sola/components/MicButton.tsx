@@ -30,17 +30,20 @@ export default function MicButton({ setText, setIsRecording, language }: MicButt
   return (
     <button
       onClick={handleMicClick}
-      className={`p-4 rounded-full transition-all ${
+      className={`p-4 rounded-2xl transition-all duration-300 shadow-lg ${
         isRecording 
-          ? "bg-red-500 text-white animate-pulse" 
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          ? "bg-red-500 text-white animate-pulse shadow-red-500/25" 
+          : "bg-[#E8E3D9] text-[#3B3A36] hover:bg-[#E8E3D9]/80 hover:scale-105"
       }`}
       title={isRecording ? "Stop recording" : "Start voice input"}
     >
       {isRecording ? (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M6 6h12v12H6z"/>
-        </svg>
+        <div className="relative">
+          <div className="w-6 h-6 bg-white rounded-sm"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-2 h-2 bg-red-500 rounded-sm"></div>
+          </div>
+        </div>
       ) : (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
