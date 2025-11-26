@@ -3,18 +3,18 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  Target, 
-  Clock, 
-  Heart, 
-  Sparkles, 
-  Settings, 
-  MessageCircle, 
-  Zap,
-  Languages,
-  Globe,
-  CheckCircle,
-  Shield
+import {
+    Target,
+    Clock,
+    Heart,
+    Sparkles,
+    Settings,
+    MessageCircle,
+    Zap,
+    Languages,
+    Globe,
+    CheckCircle,
+    Shield
 } from "lucide-react";
 
 const TranslatorSection = () => {
@@ -75,10 +75,9 @@ const TranslatorSection = () => {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
-                variants={containerVariants}
             >
                 {/* Header */}
-                <motion.div className="text-center mb-16" variants={itemVariants}>
+                <motion.div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-light text-[#3B3A36] mb-6 tracking-tight">
                         Precision Translation
                     </h2>
@@ -90,7 +89,7 @@ const TranslatorSection = () => {
 
                 <div className="grid lg:grid-cols-2 gap-12 items-start">
                     {/* Left Content - Enhanced Profile Card */}
-                    <motion.div variants={itemVariants}>
+                    <motion.div >
                         <motion.div
                             className="bg-[#E8E3D9] rounded-3xl p-10 relative overflow-hidden border border-[#3B3A36]/15 shadow-sm"
                             onHoverStart={() => setIsHovered(true)}
@@ -131,17 +130,15 @@ const TranslatorSection = () => {
                             {/* Enhanced Description */}
                             <motion.p
                                 className="text-[#3B3A36]/80 leading-relaxed mb-8 relative z-10 text-base font-light"
-                                variants={itemVariants}
                             >
-                                A calm, emotionally intelligent translator specializing in Central Thai, 
-                                combining technical precision with cultural sensitivity to deliver authentic 
+                                A calm, emotionally intelligent translator specializing in Central Thai,
+                                combining technical precision with cultural sensitivity to deliver authentic
                                 and meaningful translations.
                             </motion.p>
 
                             {/* Enhanced Features Grid */}
                             <motion.div
                                 className="grid grid-cols-2 gap-4 mb-10 relative z-10"
-                                variants={itemVariants}
                             >
                                 {features.map((feature, index) => {
                                     const IconComponent = feature.icon;
@@ -156,8 +153,8 @@ const TranslatorSection = () => {
                                                 className="group-hover:scale-110 transition-transform duration-200"
                                                 whileHover={{ rotate: 5 }}
                                             >
-                                                <IconComponent 
-                                                    className="w-5 h-5" 
+                                                <IconComponent
+                                                    className="w-5 h-5"
                                                     style={{ color: feature.color }}
                                                 />
                                             </motion.div>
@@ -191,7 +188,6 @@ const TranslatorSection = () => {
                     {/* Right Content - Enhanced Supporting Elements */}
                     <motion.div
                         className="space-y-8"
-                        variants={itemVariants}
                     >
                         {/* Enhanced Process Flow */}
                         <motion.div
@@ -264,8 +260,8 @@ const TranslatorSection = () => {
                                             className="flex justify-center mb-2"
                                             whileHover={{ scale: 1.1 }}
                                         >
-                                            <IconComponent 
-                                                className="w-6 h-6" 
+                                            <IconComponent
+                                                className="w-6 h-6"
                                                 style={{ color: stat.color }}
                                             />
                                         </motion.div>
@@ -288,12 +284,12 @@ const TranslatorSection = () => {
                             })}
                         </motion.div>
 
-                     
+
                     </motion.div>
                 </div>
 
                 {/* Enhanced Bottom Decorative Element */}
-                <motion.div 
+                <motion.div
                     className="flex justify-center items-center gap-4 mt-20"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
