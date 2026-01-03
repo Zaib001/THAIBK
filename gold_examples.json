@@ -1,0 +1,102 @@
+[
+    {
+        "english": "Can you recommend a good place to eat around here?",
+        "thai": "แถวนี้มีร้านอาหารอร่อยๆ แนะนำไหมคะ",
+        "tone": "Casual, polite"
+    },
+    {
+        "english": "I'm allergic to shrimp.",
+        "thai": "ฉันแพ้กุ้งค่ะ กินไม่ได้เลย",
+        "tone": "Serious but polite"
+    },
+    {
+        "english": "How much is this?",
+        "thai": "อันนี้ราคาเท่าไหร่คะ",
+        "tone": "Casual"
+    },
+    {
+        "english": "Can you lower the price a bit?",
+        "thai": "ลดราคาหน่อยได้ไหมคะ",
+        "tone": "Negotiating, friendly"
+    },
+    {
+        "english": "Where is the nearest BTS station?",
+        "thai": "สถานี BTS ที่ใกล้ที่สุดอยู่ที่ไหนคะ",
+        "tone": "Inquiring"
+    },
+    {
+        "english": "I don't understand.",
+        "thai": "ไม่เข้าใจค่ะ ช่วยพูดอีกรอบได้ไหม",
+        "tone": "Confused, polite"
+    },
+    {
+        "english": "This is delicious!",
+        "thai": "อันนี้อร่อยมากเลยค่ะ!",
+        "tone": "Excited"
+    },
+    {
+        "english": "Do you have this in a larger size?",
+        "thai": "มีไซส์ใหญ่กว่านี้ไหมคะ",
+        "tone": "Inquiring"
+    },
+    {
+        "english": "I'm lost.",
+        "thai": "ฉันหลงทางค่ะ ช่วยหน่อยได้ไหม",
+        "tone": "Worried"
+    },
+    {
+        "english": "Can I have the bill please?",
+        "thai": "เก็บเงินด้วยค่ะ",
+        "tone": "Standard restaurant"
+    },
+    {
+        "english": "Is it far from here?",
+        "thai": "มันไกลจากที่นี่ไหมคะ",
+        "tone": "Inquiring"
+    },
+    {
+        "english": "I'm comfortable, thank you.",
+        "thai": "สบายดีค่ะ ขอบคุณนะคะ",
+        "tone": "Friendly reply"
+    },
+    {
+        "english": "What time does it open?",
+        "thai": "ร้านเปิดกี่โมงคะ",
+        "tone": "Inquiring"
+    },
+    {
+        "english": "I will come back later.",
+        "thai": "เดี๋ยวจะกลับมาใหม่นะคะ",
+        "tone": "Promising"
+    },
+    {
+        "english": "Do you speak English?",
+        "thai": "พูดภาษาอังกฤษได้ไหมคะ",
+        "tone": "Hopeful"
+    },
+    {
+        "english": "It's too spicy for me.",
+        "thai": "มันเผ็ดเกินไปสำหรับฉันค่ะ",
+        "tone": "Explaining preference"
+    },
+    {
+        "english": "Can I take a photo?",
+        "thai": "ขอถ่ายรูปหน่อยได้ไหมคะ",
+        "tone": "Polite request"
+    },
+    {
+        "english": "Nice to meet you.",
+        "thai": "ยินดีที่ได้รู้จักนะคะ",
+        "tone": "Greeting"
+    },
+    {
+        "english": "Have a nice day.",
+        "thai": "ขอให้เป็นวันที่ดีนะคะ",
+        "tone": "Closing"
+    },
+    {
+        "english": "See you later.",
+        "thai": "แล้วเจอกันนะคะ",
+        "tone": "Closing"
+    }
+]

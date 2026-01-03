@@ -1,51 +1,58 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
+import { openai } from "@/lib/openai";
+import { cookies } from "next/headers";
 
-// Enhanced mock speech-to-text service
-const mockSpeechToText = async (language: string = 'en') => {
-  await new Promise(resolve => setTimeout(resolve, 1200)); // Simulate processing delay
-  
-  const mockResponses = {
-    en: [
-      "Hello, how can I help you today?",
-      "I would like to book a hotel room in Bangkok",
-      "What time does the restaurant open?",
-      "Could you help me with directions to the beach?",
-      "Thank you very much for your assistance"
-    ],
-    th: [
-      "สวัสดีครับ มีอะไรให้ช่วยไหมคะ",
-      "ฉันต้องการจองห้องโรงแรมในกรุงเทพ",
-      "ร้านอาหารเปิดกี่โมง",
-      "ช่วยแนะนำทางไปชายหาดให้ฉันได้ไหม",
-      "ขอบคุณมากสำหรับความช่วยเหลือ"
-    ]
-  };
+const FREE_LIMIT = 5;
 
-  const responses = mockResponses[language as keyof typeof mockResponses] || mockResponses.en;
-  const randomText = responses[Math.floor(Math.random() * responses.length)];
-  
-  return randomText;
-};
-
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const { language = 'en' } = await request.json();
-    
-    console.log(`Mock speech-to-text for language: ${language}`);
-    
-    const transcribedText = await mockSpeechToText(language);
+    // 1. Rate Limit Check (Read-only, to prevent abuse)
+    const cookieStore = await cookies();
+    const usageCookie = cookieStore.get("sola_usage");
+    let usageCount = 0;
 
-    return NextResponse.json({
-      text: transcribedText,
-      language,
-      timestamp: new Date().toISOString(),
-      note: 'Mock speech-to-text service (No API key configured)'
+    if (usageCookie) {
+      const { count, date } = JSON.parse(usageCookie.value);
+      const today = new Date().toISOString().split('T')[0];
+      if (date === today) {
+        usageCount = count;
+      }
+    }
+
+    if (usageCount >= FREE_LIMIT) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded", code: "RATE_LIMIT_EXCEEDED" },
+        { status: 429 }
+      );
+    }
+
+    // 2. Parse Form Data
+    const formData = await req.formData();
+    const audioFile = formData.get("audio") as File;
+    const mode = formData.get("mode") as string | null; // Optional, maybe for future use
+
+    if (!audioFile) {
+      return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
+    }
+
+    // 3. OpenAI Whisper Call (In-memory, passing File object directly)
+    // Next.js 'File' is compatible with OpenAI SDK
+    const transcription = await openai.audio.transcriptions.create({
+      file: audioFile,
+      model: "whisper-1",
+      language: mode === "learn" ? "th" : undefined, // optimization: if learn mode, assume user is speaking Thai? Or just auto-detect. 
+      // Playbook says: "Voice input and spoken responses ... Thai <-> English (automatic detection)"
+      // So let's NOT restrict language, let it auto-detect.
     });
 
-  } catch (error) {
-    console.error('Speech to text API error:', error);
+    const text = transcription.text;
+
+    return NextResponse.json({ text });
+
+  } catch (error: any) {
+    console.error("Whisper API Error:", error);
     return NextResponse.json(
-      { error: 'Speech to text failed' },
+      { error: "Audio processing failed", details: error.message },
       { status: 500 }
     );
   }

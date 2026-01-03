@@ -1,14 +1,5 @@
-
-/* ----------------------------------------------
-   TAILWIND LAYERS
----------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
-
-
-/* ----------------------------------------------
-   GOOGLE FONTS (Montserrat)
----------------------------------------------- */
-
 
 /* ----------------------------------------------
    TRAJAN PRO 3 FONT (Will activate after ZIP upload)
@@ -23,8 +14,10 @@
 
 
 :root {
-  --background: #F4F1EC; /* amanLinen */
-  --foreground: #3B3A36; /* amanCharcoal */
+  --background: #F4F1EC;
+  /* amanLinen */
+  --foreground: #3B3A36;
+  /* amanCharcoal */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -45,13 +38,15 @@
   /* Fonts */
   --font-serif: "Trajan Pro 3", serif;
   --font-sans: "Montserrat", sans-serif;
+  --font-noto-thai: "Noto Sans Thai", sans-serif;
 }
 
 
 /* ----------------------------------------------
    BASE GLOBAL STYLING
 ---------------------------------------------- */
-html, body {
+html,
+body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-sans);
@@ -61,7 +56,8 @@ html, body {
 }
 
 /* Smooth anti-aliasing */
-body, * {
+body,
+* {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -70,21 +66,27 @@ body, * {
 /* ----------------------------------------------
    TYPOGRAPHY HIERARCHY (Matches Your Brand Spec)
 ---------------------------------------------- */
-h1, .h1 {
+h1,
+.h1 {
   font-family: var(--font-serif);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-weight: 400;
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-family: var(--font-serif);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 400;
 }
 
-p, span, li, a, button {
+p,
+span,
+li,
+a,
+button {
   font-family: var(--font-sans);
 }
 
@@ -92,7 +94,8 @@ p, span, li, a, button {
 /* ----------------------------------------------
    BUTTON STYLE BASELINE
 ---------------------------------------------- */
-button, .btn {
+button,
+.btn {
   font-family: var(--font-sans);
   font-weight: 600;
   text-transform: uppercase;

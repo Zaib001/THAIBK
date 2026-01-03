@@ -238,9 +238,7 @@ export default function Header() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/login"
-                  className="hidden sm:flex items-center gap-2 px-4 py-2.5 text-sm font-semibold 
-               text-gray-700 hover:text-gray-900 hover:bg-gray-50 
-               rounded-xl transition-all duration-300"
+                  className="hidden sm:flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-300"
                 >
                   <User className="w-4 h-4" />
                   Login
