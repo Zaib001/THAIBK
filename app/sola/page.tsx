@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from "next-auth/react";
+import { useSearchParams, useRouter } from "next/navigation";
 import MicButton from "./components/MicButton";
 import TranslationBox from "./components/TranslationBox";
 import UpgradeModal from "./components/UpgradeModal";
@@ -17,12 +19,16 @@ const ERROR_COPY = {
     en: "This could mean a few things — could you tell me the situation?"
   },
   rateLimit: {
-    th: "คุณใช้สิทธิ์ครบจำนวนของวันนี้แล้ว อัปเกรดเป็น THAIBK+ เพื่อใช้งานไม่จำกัด",
-    en: "You’ve reached today’s free limit. Upgrade to THAIBK+ for unlimited access."
+    th: "คุณใช้สิทธิ์ครบจำนวนของวันนี้แล้ว อัปเกรดเป็น THAIBK+ เพื่อใช้งาน 100 ครั้ง",
+    en: "You’ve reached today’s limit. Upgrade to THAIBK+ for 100 translations."
   }
 };
 
 export default function SOLA() {
+  const { data: session, update: updateSession } = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   // State
   const [inputText, setInputText] = useState("");
   const [mode, setMode] = useState<"translate" | "learn">("translate");
@@ -30,14 +36,75 @@ export default function SOLA() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [count, setCount] = useState(0);
+  const [latestPremium, setLatestPremium] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const FREE_LIMIT = 5;
+  const PREMIUM_LIMIT = 100;
+
+  // Use session status as initial but fallback to latest fetched status
+  const isPremium = latestPremium || (session?.user as any)?.isPremium || false;
+  const currentLimit = isPremium ? PREMIUM_LIMIT : FREE_LIMIT;
+
+  // Fetch latest user status from DB
+  const fetchUserStatus = async () => {
+    if (!session) return;
+    try {
+      const res = await fetch("/api/user/status");
+      if (res.ok) {
+        const data = await res.json();
+        setCount(data.usageCount);
+        setLatestPremium(data.isPremium);
+
+        // Sync session in background if it's different
+        if (session.user && (
+          (session.user as any).usageCount !== data.usageCount ||
+          (session.user as any).isPremium !== data.isPremium
+        )) {
+          updateSession();
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch user status:", error);
+    }
+  };
+
+  // Handle Stripe Success with Polling
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      let retries = 0;
+      const maxRetries = 5;
+
+      const pollStatus = async () => {
+        await fetchUserStatus();
+
+        // If we got premium OR we reached max retries, stop and clean URL
+        if (isPremium || retries >= maxRetries) {
+          router.replace("/sola");
+          return;
+        }
+
+        retries++;
+        setTimeout(pollStatus, 2000); // Check every 2 seconds
+      };
+
+      pollStatus();
+    }
+  }, [searchParams, router, isPremium]);
+
+  // Initial fetch and session sync
+  useEffect(() => {
+    if (session?.user) {
+      setCount((session.user as any).usageCount || 0);
+      setLatestPremium((session.user as any).isPremium || false);
+      fetchUserStatus();
+    }
+  }, [session]);
 
   const handleTranslate = async (textToTranslate: string = inputText) => {
     if (!textToTranslate.trim()) return;
 
-    if (count >= FREE_LIMIT) {
+    if (count >= currentLimit) {
       setErrorMsg(ERROR_COPY.rateLimit.en);
       setShowUpgrade(true);
       return;
@@ -67,7 +134,9 @@ export default function SOLA() {
       }
 
       setTranslationData(data);
-      setCount((prev: number) => prev + 1);
+      if (data.usageCount !== undefined) {
+        setCount(data.usageCount);
+      }
 
     } catch (error) {
       console.error("Translation failed:", error);
@@ -81,7 +150,7 @@ export default function SOLA() {
     setIsProcessing(true);
     setErrorMsg(null);
 
-    if (count >= FREE_LIMIT) {
+    if (count >= currentLimit) {
       setIsProcessing(false);
       setErrorMsg(ERROR_COPY.rateLimit.en);
       setShowUpgrade(true);
@@ -144,11 +213,8 @@ export default function SOLA() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full max-w-5xl"
       >
-        {/* Main Glass Container */}
         <div className="bg-white/70 backdrop-blur-2xl rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(59,58,54,0.1)] border border-white/50 overflow-hidden">
-
           <div className="p-8 md:p-16">
-            {/* Elegant Header */}
             <header className="text-center mb-12 md:mb-16">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -165,7 +231,6 @@ export default function SOLA() {
                 </div>
               </motion.div>
 
-              {/* Sophisticated Mode Toggle */}
               <div className="mt-10 inline-flex bg-[#E8E3D9]/50 p-1.5 rounded-full border border-[#E8E3D9]/20 backdrop-blur-sm">
                 {(["translate", "learn"] as const).map((m) => (
                   <button
@@ -189,10 +254,7 @@ export default function SOLA() {
               </div>
             </header>
 
-            {/* Layout Grid */}
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-stretch">
-
-              {/* Left Column: Input */}
               <div className="flex flex-col">
                 <div className="relative group flex-1">
                   <textarea
@@ -203,7 +265,6 @@ export default function SOLA() {
                     disabled={isProcessing}
                   />
 
-                  {/* Premium Action Row */}
                   <div className="absolute bottom-8 right-8 flex items-center gap-4">
                     <AnimatePresence>
                       {inputText && (
@@ -258,16 +319,13 @@ export default function SOLA() {
                 </div>
               </div>
 
-              {/* Right Column: Output */}
               <div className="flex flex-col min-h-[400px]">
                 <TranslationBox data={translationData} isLoading={isProcessing} />
               </div>
-
             </div>
 
-            {/* Bottom Utility Bar */}
             <footer className="mt-16 pt-12 border-t border-[#E8E3D9]/30 flex flex-col md:flex-row items-center justify-between gap-8">
-              <LimitBadge count={count} limit={FREE_LIMIT} />
+              <LimitBadge count={count} limit={currentLimit} isPremium={isPremium} />
               <div className="flex items-center gap-6">
                 <button
                   onClick={() => setShowUpgrade(true)}

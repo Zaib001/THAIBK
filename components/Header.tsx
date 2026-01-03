@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ChevronDown,
   Menu,
   X,
   Search,
@@ -12,20 +12,16 @@ import {
   Globe,
   HeartHandshake,
   MapPin,
-  BookOpen,
   Sparkles,
-  Home,
-  Users,
-  GraduationCap,
-  Briefcase,
-  Plane
+  LogOut,
+  MessageCircle,
 } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -43,14 +39,6 @@ export default function Header() {
       icon: Globe,
       color: "text-emerald-500",
       bgColor: "bg-emerald-50",
-      dropdown: [
-        { label: "Living in Thailand", href: "/lifestyle/living", icon: Home },
-        { label: "Culture & Etiquette", href: "/lifestyle/culture", icon: Users },
-        { label: "Cost of Living Guide", href: "/lifestyle/cost", icon: Briefcase },
-        { label: "Guides & Learning", href: "/learn/guides", icon: GraduationCap },
-        { label: "Courses & Classes", href: "/learn/courses", icon: BookOpen },
-        { label: "Workshops & Experiences", href: "/learn/workshops", icon: Sparkles },
-      ]
     },
     {
       label: "Relocation",
@@ -58,13 +46,6 @@ export default function Header() {
       icon: MapPin,
       color: "text-blue-500",
       bgColor: "bg-blue-50",
-      dropdown: [
-        { label: "Relocation Pathways", href: "/relocation/pathways", icon: Plane },
-        { label: "Find Housing", href: "/relocation/housing", icon: Home },
-        { label: "Health & Insurance", href: "/relocation/health", icon: HeartHandshake },
-        { label: "Visa Options", href: "/visas/options", icon: BookOpen },
-        { label: "Visa Assistance", href: "/visas/assistance", icon: Users },
-      ]
     },
     {
       label: "Community",
@@ -72,23 +53,13 @@ export default function Header() {
       icon: HeartHandshake,
       color: "text-purple-500",
       bgColor: "bg-purple-50",
-      dropdown: [
-        { label: "Forum Discussions", href: "/community/forum", icon: Users },
-        { label: "Local Clubs & Activities", href: "/community/clubs", icon: HeartHandshake },
-        { label: "Volunteer & Give Back", href: "/community/volunteer", icon: Sparkles },
-      ]
     },
     {
       label: "SOLA",
       href: "/sola",
-      icon: Sparkles,
+      icon: MessageCircle,
       color: "text-amber-500",
       bgColor: "bg-amber-50",
-      dropdown: [
-        { label: "AI Translator", href: "/sola", icon: Globe },
-        { label: "Language Learning", href: "/sola", icon: GraduationCap },
-        { label: "Cultural Guide", href: "/sola", icon: BookOpen },
-      ]
     },
   ];
 
@@ -99,8 +70,8 @@ export default function Header() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled
-            ? "bg-white/95 backdrop-blur-xl shadow-2xl shadow-gray-200/50 border-b border-gray-100/50"
-            : "bg-white/90 backdrop-blur-md border-b border-gray-100/30"
+          ? "bg-white/95 backdrop-blur-xl shadow-2xl shadow-gray-200/50 border-b border-gray-100/50"
+          : "bg-white/90 backdrop-blur-md border-b border-gray-100/30"
           }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,70 +101,23 @@ export default function Header() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-1">
               {menuItems.map((item) => (
-                <div
+                <Link
                   key={item.label}
-                  className="relative"
-                  onMouseEnter={() => setActiveDropdown(item.label)}
-                  onMouseLeave={() => setActiveDropdown(null)}
+                  href={item.href}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 group ${pathname.startsWith(item.href)
+                    ? `${item.bgColor} ${item.color} shadow-md`
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
                 >
-                  <Link
-                    href={item.href}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 group ${pathname.startsWith(item.href)
-                        ? `${item.bgColor} ${item.color} shadow-md`
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                      }`}
-                  >
-                    <item.icon className={`w-4 h-4 ${pathname.startsWith(item.href) ? item.color : "text-gray-400 group-hover:text-gray-600"}`} />
-                    {item.label}
-                    <motion.div
-                      animate={{ rotate: activeDropdown === item.label ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ChevronDown className="w-4 h-4" />
-                    </motion.div>
-                  </Link>
-
-                  {/* Dropdown Menu */}
-                  <AnimatePresence>
-                    {activeDropdown === item.label && item.dropdown.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden"
-                      >
-                        <div className="p-2">
-                          {item.dropdown.map((dropdownItem, index) => (
-                            <motion.div
-                              key={dropdownItem.href}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.05 }}
-                            >
-                              <Link
-                                href={dropdownItem.href}
-                                className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-200 group"
-                                onClick={() => setActiveDropdown(null)}
-                              >
-                                <div className={`p-2 rounded-lg ${item.bgColor} group-hover:scale-110 transition-transform duration-200`}>
-                                  <dropdownItem.icon className={`w-4 h-4 ${item.color}`} />
-                                </div>
-                                <span className="font-medium">{dropdownItem.label}</span>
-                              </Link>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                  <item.icon className={`w-4 h-4 ${pathname.startsWith(item.href) ? item.color : "text-gray-400 group-hover:text-gray-600"}`} />
+                  {item.label}
+                </Link>
               ))}
             </nav>
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-3">
-              {/* Search Button with Expandable Input */}
+              {/* Search Button */}
               <div className="relative">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -233,27 +157,48 @@ export default function Header() {
                 </AnimatePresence>
               </div>
 
-              {/* Login Button */}
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/login"
-                  className="hidden sm:flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-300"
-                >
-                  <User className="w-4 h-4" />
-                  Login
-                </Link>
-              </motion.div>
-
-              {/* Get Started Button */}
-              {/* <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300"
-              >
-                <Sparkles className="w-4 h-4" />
-                Get Started
-              </motion.button> */}
+              {/* User Authentication Actions */}
+              {status === "loading" ? (
+                <div className="w-10 h-10 rounded-xl bg-gray-100 animate-pulse hidden sm:block"></div>
+              ) : session ? (
+                <div className="flex items-center gap-3">
+                  <div className="hidden sm:flex items-center gap-2 px-2 py-1.5 bg-gray-50 rounded-xl border border-gray-200">
+                    {session.user?.image ? (
+                      <img
+                        src={session.user.image}
+                        alt=""
+                        className="w-7 h-7 rounded-lg object-cover"
+                      />
+                    ) : (
+                      <div className="w-7 h-7 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-[10px] uppercase">
+                        {session.user?.name?.charAt(0) || <User className="w-3 h-3" />}
+                      </div>
+                    )}
+                    <span className="text-xs font-bold text-gray-700 max-w-[80px] truncate">
+                      {session.user?.name?.split(' ')[0]}
+                    </span>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => signOut()}
+                    className="p-2.5 text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 border border-transparent hover:border-red-100"
+                    title="Sign Out"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </motion.button>
+                </div>
+              ) : (
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    href="/login"
+                    className="hidden sm:flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-300"
+                  >
+                    <User className="w-4 h-4" />
+                    Login
+                  </Link>
+                </motion.div>
+              )}
 
               {/* Mobile Menu Button */}
               <motion.button
@@ -282,56 +227,67 @@ export default function Header() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200/50 overflow-hidden"
             >
-              <div className="px-4 py-6 space-y-2">
-                {menuItems.map((item) => (
-                  <div key={item.label} className="space-y-1">
+              <div className="px-4 py-6 space-y-4">
+                {session && (
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      {session.user?.image ? (
+                        <img src={session.user.image} alt="" className="w-10 h-10 rounded-xl object-cover" />
+                      ) : (
+                        <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold">
+                          {session.user?.name?.charAt(0) || <User className="w-5 h-5" />}
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-bold text-gray-900">{session.user?.name}</p>
+                        <p className="text-[10px] text-gray-500">{session.user?.email}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => signOut()}
+                      className="p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors"
+                    >
+                      <LogOut className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-3">
+                  {menuItems.map((item) => (
                     <Link
+                      key={item.label}
                       href={item.href}
-                      className={`flex items-center justify-between p-3 rounded-xl text-base font-semibold transition-all duration-200 ${pathname.startsWith(item.href)
-                          ? `${item.bgColor} ${item.color} shadow-sm`
-                          : "text-gray-700 hover:bg-gray-50"
+                      className={`flex flex-col items-center justify-center p-4 rounded-2xl text-sm font-semibold transition-all duration-200 ${pathname.startsWith(item.href)
+                        ? `${item.bgColor} ${item.color} shadow-sm border border-${item.color.split("-")[1]}-200`
+                        : "bg-gray-50 text-gray-700 hover:bg-gray-100"
                         }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <div className="flex items-center gap-3">
-                        <item.icon className="w-5 h-5" />
-                        {item.label}
-                      </div>
-                      {item.dropdown.length > 0 && (
-                        <ChevronDown className="w-4 h-4" />
-                      )}
+                      <item.icon className="w-6 h-6 mb-2" />
+                      {item.label}
                     </Link>
+                  ))}
+                </div>
 
-                    {/* Mobile Dropdown */}
-                    {item.dropdown.length > 0 && (
-                      <div className="ml-8 space-y-1">
-                        {item.dropdown.map((dropdownItem) => (
-                          <Link
-                            key={dropdownItem.href}
-                            href={dropdownItem.href}
-                            className="flex items-center gap-3 p-2 text-sm text-gray-600 hover:text-gray-900 rounded-lg transition-colors duration-200"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                          >
-                            <dropdownItem.icon className="w-4 h-4 text-gray-400" />
-                            {dropdownItem.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                {/* Mobile Action Buttons */}
-                <div className="pt-4 space-y-3 border-t border-gray-200 mt-4">
-                  <button className="flex items-center justify-center gap-3 w-full py-3 text-gray-700 font-semibold border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-300">
+                {!session && (
+                  <Link
+                    href="/login"
+                    className="flex items-center justify-center gap-3 w-full py-4 text-gray-700 font-semibold bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all duration-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
                     <User className="w-5 h-5" />
                     Login to Account
-                  </button>
-                  <button className="flex items-center justify-center gap-3 w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/30 transition-all duration-300">
-                    <Sparkles className="w-5 h-5" />
-                    Start Your Journey
-                  </button>
-                </div>
+                  </Link>
+                )}
+
+                <Link
+                  href="/sola"
+                  className="flex items-center justify-center gap-3 w-full py-4 bg-black text-white font-bold rounded-2xl shadow-xl shadow-gray-200 transition-all duration-300 active:scale-[0.98]"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Sparkles className="w-5 h-5" />
+                  Explore THAIBK
+                </Link>
               </div>
             </motion.div>
           )}

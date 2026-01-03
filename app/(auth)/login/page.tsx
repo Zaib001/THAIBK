@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface LoginFormState {
     email: string;
@@ -11,6 +13,7 @@ interface LoginFormState {
 }
 
 export default function LoginPage() {
+    const router = useRouter();
     const [form, setForm] = useState<LoginFormState>({
         email: "",
         password: "",
@@ -30,12 +33,20 @@ export default function LoginPage() {
         setIsLoading(true);
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            console.log("Login →", form);
-            // 🔹 TODO: connect with backend API: /auth/login
+            const res = await signIn("credentials", {
+                email: form.email,
+                password: form.password,
+                redirect: false,
+            });
+
+            if (res?.error) {
+                setError("Invalid email or password. Please try again.");
+            } else {
+                router.push("/sola");
+                router.refresh();
+            }
         } catch (err) {
-            setError("Invalid email or password. Please try again.");
+            setError("Something went wrong. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -61,7 +72,7 @@ export default function LoginPage() {
                         transition={{ duration: 0.8 }}
                         className="max-w-2xl w-full flex flex-col items-center justify-center"
                     >
-                    
+
 
                         {/* Main Quote */}
                         <motion.h1

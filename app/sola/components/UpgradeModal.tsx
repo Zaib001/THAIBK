@@ -1,6 +1,9 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -8,6 +11,35 @@ interface UpgradeModalProps {
 }
 
 export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleUpgrade = async () => {
+    if (!session) {
+      router.push("/login");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || "Failed to create checkout session");
+      }
+    } catch (error) {
+      console.error("Upgrade failed:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -26,9 +58,7 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative bg-white rounded-[3rem] max-w-lg w-full overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)] border border-white/20"
           >
-            {/* Sophisticated Header */}
             <div className="bg-[#3B3A36] p-12 text-center relative overflow-hidden">
-              {/* Abstract Brass Circles */}
               <div className="absolute -top-10 -right-10 w-64 h-64 bg-[#D4AF37]/5 rounded-full blur-[60px]" />
               <div className="absolute top-20 -left-10 w-40 h-40 bg-[#E8E3D9]/5 rounded-full blur-[40px]" />
 
@@ -39,11 +69,10 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                   </svg>
                 </div>
                 <h2 className="text-3xl font-serif text-[#F4F1EC] mb-2 tracking-[0.2em] uppercase">THAIBK+</h2>
-                <p className="text-[#F4F1EC]/40 text-[10px] font-bold tracking-[0.4em] uppercase">Evelating Your Journey</p>
+                <p className="text-[#F4F1EC]/40 text-[10px] font-bold tracking-[0.4em] uppercase">Elevating Your Journey</p>
               </div>
             </div>
 
-            {/* Content Area */}
             <div className="p-10 md:p-14 bg-[#F4F1EC]">
               <div className="text-center mb-10">
                 <div className="flex items-baseline justify-center gap-1 mb-3">
@@ -51,14 +80,13 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                   <span className="text-[#3B3A36]/40 font-bold text-xs tracking-widest uppercase">/ Monthly</span>
                 </div>
                 <p className="text-[#3B3A36]/60 text-sm font-medium leading-[1.8] max-w-[280px] mx-auto">
-                  Expand your horizons with unlimited SOLA interpretations and exclusive relocation insights.
+                  Expand your horizons with 100 SOLA interpretations and exclusive relocation insights.
                 </p>
               </div>
 
-              {/* Premium Feature List */}
               <div className="space-y-4 mb-12">
                 {[
-                  "Unlimited SOLA Interpretations",
+                  "100 SOLA Interpretations",
                   "Priority Multimodal STT/TTS",
                   "Early Access: Relocation Hub"
                 ].map((feature) => (
@@ -73,10 +101,13 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                 ))}
               </div>
 
-              {/* Action Stack */}
               <div className="space-y-4">
-                <button className="w-full bg-[#3B3A36] text-[#F4F1EC] px-8 py-5 rounded-[1.5rem] font-bold text-xs tracking-[0.25em] transition-all hover:bg-[#2C2B28] hover:shadow-2xl hover:shadow-[#3B3A36]/20 active:scale-[0.98] uppercase">
-                  Begin Journey
+                <button
+                  onClick={handleUpgrade}
+                  disabled={isLoading}
+                  className="w-full bg-[#3B3A36] text-[#F4F1EC] px-8 py-5 rounded-[1.5rem] font-bold text-xs tracking-[0.25em] transition-all hover:bg-[#2C2B28] hover:shadow-2xl hover:shadow-[#3B3A36]/20 active:scale-[0.98] uppercase disabled:opacity-50"
+                >
+                  {isLoading ? "Redirecting..." : session ? "Begin Journey" : "Login to Upgrade"}
                 </button>
                 <button
                   className="w-full text-[#3B3A36]/30 hover:text-[#3B3A36] transition-colors py-2 text-[10px] font-bold tracking-[0.3em] uppercase"

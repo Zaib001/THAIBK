@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface RegisterFormState {
   firstName: string;
@@ -14,6 +16,7 @@ interface RegisterFormState {
 }
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [form, setForm] = useState<RegisterFormState>({
     firstName: "",
     lastName: "",
@@ -49,12 +52,37 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log("Register →", form);
-      // 🔹 TODO: connect with backend API: /auth/register
-    } catch (err) {
-      setError("Registration failed. Please try again.");
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${form.firstName} ${form.lastName}`,
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
+
+      // Auto-login
+      const loginRes = await signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        redirect: false,
+      });
+
+      if (loginRes?.error) {
+        router.push("/login");
+      } else {
+        router.push("/sola");
+        router.refresh();
+      }
+    } catch (err: any) {
+      setError(err.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
